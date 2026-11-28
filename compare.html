@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#fff4dc">
+<title>Compare Hotdog TV</title>
+<!--
+  Feature comparison with other IPTV / media players. Source: scripts/downloads-site/ in the app's
+  repo; scripts/publish-repo.js copies it into the downloads repo at every release, so edit it there.
+  Not linked from the home page yet.
+
+  To fill it in, edit APPS and FEATURES in the script at the bottom; the table is built from them.
+-->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Same colours and lettering as the download page (index.html) */
+:root{
+  --page:#fff4dc; --card:#fffaf0; --crust:#f3d9a4; --crust-dark:#e6bf78;
+  --ink:#4a2212; --ink-mid:#74472f; --ink-low:#9a7258;
+  --red:#e12c27; --red-dark:#c41f17; --red-deep:#9c150f;
+  --mustard:#f7ac1e; --mustard-dark:#e8960d; --mustard-deep:#c97a06;
+  --bun:#e8862c; --bun-light:#fbe3b5;
+  --ours:#fff1d6;           /* the Hotdog TV column */
+}
+*{box-sizing:border-box}
+html{background:var(--page)}
+body{margin:0;min-height:100vh;color:var(--ink);
+  background:radial-gradient(44rem 26rem at 50% 4rem, #ffe7b3, transparent 70%), var(--page);
+  background-repeat:no-repeat;
+  font:16px/1.55 Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased}
+main{max-width:56rem;margin:0 auto;padding:2.25rem 16px 4rem}
+a{color:var(--red-dark);font-weight:700}
+a:hover{color:var(--red-deep)}
+
+.hero{text-align:center;margin-bottom:1.75rem}
+.hero img{width:min(9rem,40vw);height:auto;display:block;margin:0 auto .6rem}
+h1{margin:0 0 .4rem;font:400 clamp(1.8rem,6vw,2.5rem)/1.15 "Lilita One",Nunito,sans-serif;letter-spacing:.01em;
+  background:linear-gradient(var(--red) 56%, var(--red-dark) 56%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0 auto;max-width:34rem;color:var(--ink-mid);font-size:1.05rem;font-weight:600}
+
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.2rem;margin:0 0 1rem;color:var(--ink-mid);font-size:.88rem;font-weight:700}
+.legend span{display:inline-flex;align-items:center;gap:.4rem}
+
+/* The table sits in a card; with many apps it scrolls sideways inside the card, never the page */
+.card{background:var(--card);border:2px solid var(--crust);border-radius:20px;box-shadow:0 5px 0 var(--crust-dark);overflow:hidden}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse}
+th,td{padding:.6rem .8rem;text-align:center;vertical-align:middle}
+thead th{background:var(--card);border-bottom:2px solid var(--crust);
+  font:400 1.15rem/1.15 "Lilita One",Nunito,sans-serif;letter-spacing:.01em;color:var(--ink)}
+thead th:first-child{text-align:left;color:var(--ink-low);font:800 .78rem/1.2 Nunito,sans-serif;text-transform:uppercase;letter-spacing:.06em}
+thead th.ours{background:var(--ours);color:var(--red-dark)}
+thead .sub{display:block;margin-top:.2rem;font:700 .74rem/1.2 Nunito,sans-serif;color:var(--ink-low);letter-spacing:0}
+
+/* Section rows: TV Guide, Recording ... */
+tr.sec th{text-align:left;padding:1.3rem .8rem .45rem;border-bottom:2px dashed var(--crust);
+  font:400 1.2rem/1.2 "Lilita One",Nunito,sans-serif;letter-spacing:.01em;
+  background:linear-gradient(var(--red) 56%, var(--red-dark) 56%);-webkit-background-clip:text;background-clip:text;color:transparent}
+tbody tr.f td{border-bottom:1px solid #f6e6c4}
+tbody tr.f:last-child td{border-bottom:0}
+tbody tr.f:hover td{background:#fff6e4}
+tbody tr.f:hover td.ours{background:#ffe9c2}
+td.name{text-align:left;width:52%}
+td.name b{display:block;font-weight:800;font-size:.97rem;line-height:1.3}
+td.name small{display:block;margin-top:.1rem;color:var(--ink-mid);font-size:.84rem;line-height:1.4}
+td.ours{background:var(--ours)}
+
+/* Yes / No marks */
+.mk{display:inline-grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;vertical-align:middle}
+.mk svg{width:1rem;height:1rem}
+.yes{color:#fff;background:linear-gradient(var(--red) 55%, var(--red-dark) 55%);box-shadow:0 2px 0 var(--red-deep)}
+.no{color:var(--ink-low);background:#f4e7cc}
+.note{display:block;margin-top:.25rem;font-size:.78rem;font-weight:700;line-height:1.25;color:var(--ink-mid)}
+
+.foot{margin:1.25rem .25rem 0;color:var(--ink-low);font-size:.86rem;font-weight:600;line-height:1.5}
+.foot p{margin:.4rem 0}
+footer{margin-top:2rem;text-align:center;font-size:.9rem}
+
+@media (max-width:40rem){
+  th,td{padding:.55rem .5rem}
+  td.name{width:auto}
+  td.name small{display:none}
+  thead th{font-size:1rem}
+}
+</style>
+</head>
+<body>
+<main>
+
+<header class="hero">
+  <a href="./"><img src="logo.svg" alt="Hotdog TV" width="902" height="793"></a>
+  <h1>How Hotdog TV compares</h1>
+  <p>Everything Hotdog TV does, side by side with other IPTV and media players.</p>
+</header>
+
+<div class="legend" aria-hidden="true">
+  <span><i class="mk yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i>Yes</span>
+  <span><i class="mk no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg></i>No</span>
+</div>
+
+<div class="card"><div class="scroll">
+  <table id="compare">
+    <thead><tr id="head"><th scope="col">Feature</th></tr></thead>
+    <tbody id="body"></tbody>
+  </table>
+</div></div>
+
+<div class="foot">
+  <p>Hotdog TV's features are shown as they are on Android TV and Fire TV. Most are on Apple TV, Windows, Mac and Linux too.</p>
+  <p>Hotdog TV doesn't come with any channels: you add your own playlist or media server. TiviMate is a trademark of its owner; Hotdog TV isn't connected with it.</p>
+</div>
+
+<footer><a href="./">&larr; Download Hotdog TV</a></footer>
+
+</main>
+<script>
+// ---------------------------------------------------------------------------------------------
+// The columns. Add another app by adding its name here and a value for it on every feature line
+// (a line that is short of values shows the missing ones as blank).
+var APPS = [
+  { name: 'Hotdog TV', sub: 'Android TV · Apple TV · PC', ours: true },
+  { name: 'TiviMate',  sub: 'Android TV' }
+]
+
+// Each value is:
+//   'yes'   a tick
+//   'no'    a cross
+//   ''      blank: not filled in yet
+//   other   a tick with those words under it, e.g. 'Premium' or 'Up to 4'
+//   '-'     a cross with nothing else (same as 'no'); 'no: words' is a cross with words under it
+// A section is a line with just a title: ['TV Guide']
+var FEATURES = [
+  ['Devices'],
+  ['Android TV, Google TV and Fire TV', '', 'yes', 'yes'],
+  ['Apple TV', 'tvOS 18 or newer', 'yes', 'no'],
+  ['Windows', '', 'yes', 'no'],
+  ['Mac', 'Apple Silicon and Intel', 'yes', 'no'],
+  ['Linux', '', 'yes', 'no'],
+  ['Updates itself', 'Tells you when a new version is out, with optional betas', 'yes', 'yes'],
+
+  ['Playlists and sources'],
+  ['M3U playlists', '', 'yes', 'yes'],
+  ['Xtream Codes', '', 'yes', 'yes'],
+  ['XMLTV TV guides', 'Including the guide a playlist names itself, compressed or not', 'yes', 'yes'],
+  ['More than one playlist', '', 'yes', 'yes'],
+  ['Jellyfin servers', 'Movies and shows from your own server, with your place sent back to it', 'yes', 'no'],
+  ['Silo servers', 'With Silo profiles and PINs', 'yes', 'no'],
+  ['Finds media servers on your network', 'Lists the Jellyfin and Silo servers it finds', 'yes', ''],
+  ['Add a playlist from your phone', 'Scan a code on the TV and type the details on your phone', 'yes', ''],
+  ['Subscription ending reminders', 'A notice when an Xtream subscription ends within 7 days', 'yes', ''],
+  ['Fast updates of big playlists', 'Only what changed is saved, so even huge lists update quickly', 'yes', ''],
+
+  ['TV Guide and channels'],
+  ['TV Guide grid', 'With the picture playing above it', 'yes', 'yes'],
+  ['Channels list with preview', 'What\'s on, and earlier and later programmes, beside the picture', 'yes', 'yes'],
+  ['Season and episode numbers in the guide', 'Laid out the way you choose, with a live preview', 'yes', ''],
+  ['Assign a guide to a channel', 'Pick the guide for a channel by hand', 'yes', 'yes'],
+  ['Guide time offset', 'For a channel or a whole group', 'yes', ''],
+  ['Keeps past days of the guide', 'For as many days as you choose', 'yes', ''],
+  ['Favourites', '', 'yes', 'yes'],
+  ['Favourite groups', 'Starred groups at the top of the groups list', 'yes', ''],
+  ['Hide channels and groups', 'Or tick the groups to show', 'yes', 'yes'],
+  ['Reorder channels and groups', '', 'yes', 'yes'],
+  ['Recent channels', '', 'yes', 'yes'],
+  ['Watch history', 'The programmes you\'ve watched, by day, to play again from catch-up', 'yes', ''],
+  ['Search', 'Channels, programmes, movies and shows, with the picture playing beside', 'yes', 'yes'],
+  ['Also On', 'When a channel has trouble, offers other channels showing the same programme', 'yes', ''],
+  ['Groups panel width', 'Make the groups list wider for long names', 'yes', ''],
+
+  ['Watching live TV'],
+  ['Catch-up', '', 'yes', 'yes'],
+  ['Catch-up runs on into the next programme', 'Without a pause, and picks up where you left off', 'yes', ''],
+  ['Pause and rewind live TV', 'Timeshift on the box\'s storage, limited by time or space', 'yes', ''],
+  ['Multiview', 'Several channels on screen at once', 'Up to 9', 'yes'],
+  ['Display mode', 'Normal, Full, Zoom, 4:3, 16:9 and more, kept for each channel', 'yes', 'yes'],
+  ['Audio sync', 'For each channel', 'yes', ''],
+  ['Subtitles and captions', 'Including captions on live channels', 'yes', ''],
+  ['Auto frame rate', 'Matches the TV\'s refresh rate to the channel', 'yes', 'yes'],
+  ['Dolby and DTS', 'Passed through to the TV or receiver, or decoded by the app when they can\'t', 'yes', ''],
+  ['Stream info', 'Resolution, codec, bitrate, buffer and dropped frames', 'yes', ''],
+  ['Screenshots', '', 'yes', ''],
+  ['Play in another player', '', 'yes', 'yes'],
+  ['Programme reminders', 'Even while the app is closed', 'yes', 'yes'],
+  ['Reminders at a time you pick', 'Such as when the match starts after the pre-show', 'yes', ''],
+  ['Remote buttons you can change', 'Every button, with a long press for each, or one choice for TiviMate\'s layout', 'yes', ''],
+
+  ['Recording'],
+  ['Record programmes', '', 'yes', 'yes'],
+  ['Record a series', 'Every showing, or new episodes only', 'yes', ''],
+  ['Record what follows', 'Carry on through the programmes after, such as a match and its build-up', 'yes', ''],
+  ['Record to USB, SD card or network share', '', 'yes', ''],
+  ['Record on your server', 'The box doesn\'t need to be on, and everyone at home can watch', 'yes', 'no'],
+  ['Recordings named and foldered by series and season', '', 'yes', ''],
+  ['See recordings from your other boxes', 'Boxes saving to the same network share list each other\'s', 'yes', ''],
+  ['Download movies, episodes and catch-up', 'To watch later, carrying on if interrupted', 'yes', ''],
+
+  ['Movies and shows'],
+  ['Movies and shows library', 'Posters, details and episodes', 'yes', ''],
+  ['Continue Watching and Next Up', '', 'yes', ''],
+  ['One title, every version', 'A title in several playlists, or in 4K or Dolby Vision too, shows once', 'yes', ''],
+  ['Skip Intro', '', 'yes', ''],
+  ['Autoplay next episode', 'At the credits, with a countdown', 'yes', ''],
+  ['Trailers', 'Played in the app', 'yes', ''],
+  ['Episode names, plots and logos from TMDb', 'Where your provider leaves them out', 'yes', ''],
+  ['Playback speed', 'Half to double speed', 'yes', ''],
+  ['Smooth skipping', 'Movies read ahead onto the box\'s storage', 'yes', ''],
+  ['Your own 24/7 channels', 'Make channels from your movies and shows, with their own guide', 'yes', ''],
+  ['Keeps favourites when a provider renumbers', 'Favourites and your place follow each title', 'yes', ''],
+
+  ['Radio'],
+  ['Radio section', 'Stations kept apart from TV channels', 'yes', ''],
+  ['Music visualisations', 'Instead of a black screen, moving with the beat', 'yes', ''],
+  ['Song lyrics', 'Line by line, in time with the song', 'yes', ''],
+  ['Holiday scenes', 'Christmas, Halloween and Australia Day, with a Christmas countdown', 'yes', ''],
+
+  ['Sync and backup'],
+  ['Sync between your devices', 'Playlists, favourites, where you got to, settings and recordings', 'yes', ''],
+  ['Sync server you run yourself', 'Windows, Mac, Linux, Raspberry Pi or Docker: your data stays at home', 'yes', 'no'],
+  ['Web portal', 'Manage playlists, guide, reminders and recordings from a browser', 'yes', ''],
+  ['Family accounts', 'Several people, each with their own favourites and progress', 'yes', ''],
+  ['Backup and restore', 'To the box, USB, a network share or your sync server', 'yes', 'yes'],
+
+  ['Parental controls and look'],
+  ['Parental controls', 'PIN for channels, groups and settings', 'yes', 'yes'],
+  ['More than one PIN', 'Each opening only what you choose', 'yes', ''],
+  ['Adult content blocked automatically', '', 'yes', ''],
+  ['Colour themes', '', 'yes', ''],
+  ['Start on a Home page', '', 'yes', ''],
+  ['12 or 24 hour clock', '', 'yes', ''],
+
+  ['Privacy and help'],
+  ['No account needed', '', 'yes', ''],
+  ['No ads or tracking', '', 'yes', ''],
+  ['Report a problem from the app', 'Send it, show it on your phone, or save it as a file', 'yes', '']
+]
+// ---------------------------------------------------------------------------------------------
+
+;(function () {
+  var TICK = '<i class="mk yes" role="img" aria-label="Yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i>'
+  var CROSS = '<i class="mk no" role="img" aria-label="No"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg></i>'
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] }) }
+  function cell(v) {
+    v = (v == null ? '' : String(v)).trim()
+    if (v === '') return '<span class="sr" aria-label="Not known"></span>'
+    var low = v.toLowerCase()
+    if (low === 'yes') return TICK
+    if (low === 'no' || v === '-') return CROSS
+    if (low.indexOf('no:') === 0) return CROSS + '<span class="note">' + esc(v.slice(3).trim()) + '</span>'
+    return TICK + '<span class="note">' + esc(v) + '</span>'
+  }
+
+  var head = document.getElementById('head')
+  APPS.forEach(function (a) {
+    var th = document.createElement('th')
+    th.scope = 'col'
+    if (a.ours) th.className = 'ours'
+    th.innerHTML = esc(a.name) + (a.sub ? '<span class="sub">' + esc(a.sub) + '</span>' : '')
+    head.appendChild(th)
+  })
+
+  var html = ''
+  FEATURES.forEach(function (f) {
+    if (f.length === 1) {
+      html += '<tr class="sec"><th colspan="' + (APPS.length + 1) + '" scope="colgroup">' + esc(f[0]) + '</th></tr>'
+      return
+    }
+    html += '<tr class="f"><td class="name"><b>' + esc(f[0]) + '</b>' + (f[1] ? '<small>' + esc(f[1]) + '</small>' : '') + '</td>'
+    APPS.forEach(function (a, i) {
+      html += '<td' + (a.ours ? ' class="ours"' : '') + '>' + cell(f[2 + i]) + '</td>'
+    })
+    html += '</tr>'
+  })
+  document.getElementById('body').innerHTML = html
+})()
+</script>
+</body>
+</html>
